@@ -2,7 +2,7 @@
   "name": "cucumber-js-boilerplate",
   "version": "0.1.0",
   "author": "Yaron Assa",
-  "description": "Boilerplate for a large scale, hierarchical cucumberJS project",
+  "description": "Boilerplate for a large scale, hierarchical cucumberJS projects",
   "scripts": {
     "lint": "./node_modules/eslint/bin/eslint.js ./",
     "test": "node ./testRunner.js -d --strict --nohooks && node ./testRunner.js --configFile=testConfig.js",
