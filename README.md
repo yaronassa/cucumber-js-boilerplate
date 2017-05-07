@@ -47,7 +47,7 @@ Or, throw all those to the bin, and write everything by yourself.
 1. **Get the files** by one of these methods:
 
 - Clone the repository and reset its origin to your own repository
-- Download & extract the [zipped repo](hhttps://github.com/yaronassa/cucumber-js-boilerplate/archive/master.zip).
+- Download & extract the [zipped repo](https://github.com/yaronassa/cucumber-js-boilerplate/archive/master.zip).
 - Use [SAO](https://github.com/egoist/sao) to install from report via `sao yaronassa/cucumber-js-boilerplate` 
 
 2. **Install the dependencies** by one of these methods:
