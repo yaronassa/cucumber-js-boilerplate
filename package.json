@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "author": "Yaron Assa",
   "description": "Boilerplate for a large scale, hierarchical cucumberJS projects",
+  "license": "MIT",
   "scripts": {
     "lint": "./node_modules/eslint/bin/eslint.js ./",
     "test": "node ./testRunner.js -d --strict --nohooks && node ./testRunner.js --configFile=testConfig.js",
