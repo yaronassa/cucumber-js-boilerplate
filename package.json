@@ -1,0 +1,25 @@
+{
+  "name": "cucumber-js-boilerplate",
+  "version": "0.1.0",
+  "author": "Yaron Assa",
+  "description": "Boilerplate for a large scale, hierarchical cucumberJS project",
+  "scripts": {
+    "lint": "./node_modules/eslint/bin/eslint.js ./",
+    "test": "node ./testRunner.js -d --strict --nohooks && node ./testRunner.js --configFile=testConfig.js",
+    "start": "node ./testRunner.js"
+  },
+  "dependencies": {
+    "bluebird": "latest",
+    "cucumber": "^1.3.3",
+    "cucumber-html-report": "^0.5.7",
+    "deep-assign": "^2.0.0",
+    "fs-extra": "latest",
+    "moment": "^2.18.1",
+    "optimist": "latest",
+    "superagent": "latest",
+    "taffy": "^2.6.2"
+  },
+  "devDependencies": {
+    "eslint": "latest"
+  }
+}
