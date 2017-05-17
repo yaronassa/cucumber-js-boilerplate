@@ -31,19 +31,8 @@ class TestCucumberFacades {
      */
     evalInfrastructureFiles(fileMatcher, scanPath, stringMatcher, expectedResult){
 
-        /**
-         * Transforms a plain-test string into a matching regexp
-         * @param {string} source The plain text string
-         * @returns {RegExp} The resulting regular expression
-         */
-        let buildRegexp = function(source){
-            if (source.match(/^\/.+?\/[igm]*$/)){ //regexp
-                let regexpParts = source.match(/^\/(.+?)\/([igm]*)$/);
-                return new RegExp(regexpParts[1], regexpParts[2] || '');
-            } else {
-                return new RegExp(source.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1'));
-            }
-        };
+      
+        let buildRegexp = this._testInfra.automationInfrastructure.utils.parser.buildRegexp;
         
         let fileMatcherTest = buildRegexp(fileMatcher);
         let stringMatcherTest = buildRegexp(stringMatcher);

@@ -15,6 +15,20 @@ class Parser {
     }
 
     /**
+     * Transforms a plain-test string into a matching regexp
+     * @param {string} source The plain text string
+     * @returns {RegExp} The resulting regular expression
+     */
+    buildRegexp(source){
+        if (source.match(/^\/.+?\/[igm]*$/)){
+            let regexpParts = source.match(/^\/(.+?)\/([igm]*)$/);
+            return new RegExp(regexpParts[1], regexpParts[2] || '');
+        } else {
+            return new RegExp(source.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1'));
+        }
+    }
+
+    /**
      * Parses a comma separated field list into fieldName, fieldValue pairs
      * @param {string} [fieldsData=''] The fields string to parse
      * @param {boolean} [parseVariable=true] Parse and interpret ${} variables
