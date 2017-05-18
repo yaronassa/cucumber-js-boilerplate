@@ -122,7 +122,7 @@ class TestFlow {
 
                 _self._infra.log(`\nScenario status: ${_self._currentState.currentScenario.status}, duration = ${duration}s\n`, 'log', 'close');
 
-                _self.currentFeatureResult = TestFlow.nextCucumberStatus(_self._currentState.currentFeature.status, _self._currentState.currentScenario.status);
+                _self._currentState.currentFeature.status = TestFlow.nextCucumberStatus(_self._currentState.currentFeature.status, _self._currentState.currentScenario.status);
 
                 let hookActions = [
                     function testEnvironment(){return _self._infra.testEnvironment.afterScenarioActions();}
