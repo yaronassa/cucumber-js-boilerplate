@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 let testInfrastructure = new (require('../../testInfrastructure/testInfrastructure'))();
 
 /**
@@ -6,7 +5,7 @@ let testInfrastructure = new (require('../../testInfrastructure/testInfrastructu
  * @this {{registerHandler: function}}
  */
 let automationInfraHook = function () {
-    //TODO: manage hooks if needed
+    testInfrastructure.hookManager.mapTestCucumberHooks(this);
 };
 
 module.exports = automationInfraHook;

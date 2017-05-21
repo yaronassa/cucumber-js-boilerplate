@@ -25,6 +25,14 @@ class DemoFacadesGeneral {
         return Promise.reject(new Error(errorMessage));
     }
 
+    /**
+     * A trivial facade for demo steps that do nothing
+     * @returns {Promise}
+     */
+    emptyStep(){
+        return Promise.resolve();
+    }
+
 }
 
 module.exports = DemoFacadesGeneral;

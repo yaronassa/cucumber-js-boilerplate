@@ -6,6 +6,12 @@ Feature: Demonstrating meta capabilities
   Scenario: A demo scenario for meta-tests
     #Uncommenting the next line will fail the project meta-test run (terminal -> npm test)
     #And Eval code $.log('Something')
+  
+  Scenario: A demo scenario for meta-rules validations
+    #Comment the following line to fail the 2nd step in the project meta-test run (terminal -> npm test)
+    Given This step has a postrequisite
+    #Comment the following line to fail the 1st step in the project meta-test run (terminal -> npm test)
+    Given This step has a prerequisite
 
   Scenario: Modifying future steps expected result
     Given The next 2 step should fail
@@ -14,3 +20,4 @@ Feature: Demonstrating meta capabilities
     Given The next step should fail with custom error
     When I fail this step with error: custom error
   
+    

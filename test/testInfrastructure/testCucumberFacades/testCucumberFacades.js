@@ -30,27 +30,13 @@ class TestCucumberFacades {
      * @param {boolean} expectedResult
      */
     evalInfrastructureFiles(fileMatcher, scanPath, stringMatcher, expectedResult){
-
-      
-        let buildRegexp = this._testInfra.automationInfrastructure.utils.parser.buildRegexp;
         
-        let fileMatcherTest = buildRegexp(fileMatcher);
-        let stringMatcherTest = buildRegexp(stringMatcher);
+        let fileMatcherTest = this._testInfra.automationInfrastructure.utils.parser.buildRegexp(fileMatcher);
+        let stringMatcherTest = this._testInfra.automationInfrastructure.utils.parser.buildRegexp(stringMatcher);
 
         let fullPath = path.resolve(scanPath);
 
-        let walkSync = (dir, fileList) => {
-            fs.readdirSync(dir).forEach(file => {
-
-                fileList = fs.statSync(path.join(dir, file)).isDirectory()
-                    ? walkSync(path.join(dir, file), fileList)
-                    : fileList.concat(path.join(dir, file));
-
-            });
-            return fileList;
-        };
-
-        let matchingFiles = walkSync(fullPath, []).filter(file => fileMatcherTest.test(file));
+        let matchingFiles = this._testInfra.utils.walkSync(fullPath, []).filter(file => fileMatcherTest.test(file));
 
         console.log(`   Found ${matchingFiles.length} files matching ${fileMatcher}`);
 
@@ -65,6 +51,33 @@ class TestCucumberFacades {
             let errorMessage = `Expected all files ${(expectedResult) ? 'to contain' : 'not to contain'} the string ${stringMatcher}, but ${containing.length} did${(containing.length > 0) ? '\n' + containing.join('\n') : ''}`;
             throw new Error(errorMessage);
         }
+    }
+    
+    /**
+     * Validates a rule on cucumber files
+     * @param {string} scanPath relative to infrastructure root
+     * @param {string} rule The rule id
+     * @returns {Promise}
+     */
+    validateRule(scanPath, rule){
+        
+        let validator = this._testInfra.rulesValidator.getValidator(rule);
+        if (validator === undefined) return Promise.reject(new Error(`Unrecognized rule name: "${rule}"`));
+        
+        let featureFileMatcher = /.feature$/;
+        let fullPath = path.resolve(scanPath);
+        let matchingFiles = this._testInfra.utils.walkSync(fullPath, []).filter(file => featureFileMatcher.test(file));
+        
+        let validationErrors = matchingFiles
+                                .map(file => ({errors: validator(fs.readFileSync(file).toString()), file}))
+                                .filter(res => res.errors.length > 0);
+        
+        if (validationErrors.length > 0){
+            let errorMessage = `The following files didn't adhere to the ${rule} rule: \n${validationErrors.map(res => `${res.file}: ${res.errors.join('\n')}`).join('\n\n')}`;
+            return Promise.reject(new Error(errorMessage));
+        }
+        
+        return Promise.resolve();
     }
 }
 

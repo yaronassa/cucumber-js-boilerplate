@@ -23,7 +23,17 @@ class TestInfrastructure {
 
         /** @type {TestCucumberFacades} */
         this.testCucumberFacades = new (require('./testCucumberFacades/testCucumberFacades'))(this);
+        /** @type {TestCucumberParser} */
+        this.cucumberParser = new (require('./testCucumberParser/testCucumberParser'))(this);
+        /** @type {TestRulesValidator} */
+        this.rulesValidator = new (require('./testRulesValidator/testRulesValidator'))(this);
+        /** @type {TestUtils} */
+        this.utils = new (require('./testUtils/testUtils'))(this);
+        /** @type {TestHookManager} */
+        this.hookManager = new (require('./testHookManager/testHookManager'))(this);
     }
+    
+    
 
 }
 

@@ -14,6 +14,30 @@ let demoGeneralSteps = function () {
             return this.facades.demo.general.failStep(error);
         });
 
+
+    /**
+     * @cucumber-id prerequisite-demo
+     * @cucumber-rule {step-prerequisite} postrequisite-demo
+     */
+    this.Given(/^This step has a prerequisite$/,
+        /**
+         * Demonstrates a step with a prerequisite
+         */
+        function () {
+            return this.facades.demo.general.emptyStep();
+        });
+
+    /**
+     * @cucumber-id postrequisite-demo
+     * @cucumber-rule {step-postrequisite} prerequisite-demo
+     */
+    this.Given(/^This step has a postrequisite$/,
+        /**
+         * Demonstrates a step with a postrequisite
+         */
+        function () {
+            return this.facades.demo.general.emptyStep();
+        });
 };
 
 module.exports = demoGeneralSteps;

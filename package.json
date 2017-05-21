@@ -17,10 +17,13 @@
     "fs-extra": "latest",
     "moment": "^2.18.1",
     "optimist": "latest",
-    "superagent": "latest",
+    "request-promise": "^4.2.1",
+    "request" : "latest",
     "taffy": "^2.6.2"
   },
   "devDependencies": {
-    "eslint": "latest"
+    "eslint": "latest",
+    "comment-parser": "^0.4.0",
+    "gherkin": "latest"
   }
 }

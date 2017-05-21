@@ -1,7 +1,7 @@
 let AbstractReportPlugin = require('./abstractReportPlugin.js');
 
 let fs = require('fs');
-let engine = require('superagent').agent();
+let engine = require('request-promise');
 
 /**
  * A report plugin for slack integration
@@ -78,19 +78,14 @@ class SlackReportPlugin extends AbstractReportPlugin {
         let operation = engine.post(reporterConfiguration.slackWebhookURL).send(payload);
 
         console.log('\nProducing Slack report\n');
-
-        return new Promise(resolve => {
-            return operation
-                .end((err, result) => {
-                    if (err) {
-                        let message = 'Failed to perform HTTP call to ' + operation.url + ': ' + err.message;
-                        if (err.response && err.response.text) message += '\n' + err.response.text;
-                        console.error(message);
-                        //Don't reject
-                    }
-                    return resolve(result.body);
-                });
-        });
+        
+        return engine.post(reporterConfiguration.slackWebhookURL, {body : payload, json: true}).promise()
+            .catch(err => {
+                let message = 'Failed to perform HTTP call to ' + operation.url + ': ' + err.message;
+                if (err.response && err.response.text) message += '\n' + err.response.text;
+                console.error(message);
+                return Promise.resolve();
+            });
     }
 
     /**

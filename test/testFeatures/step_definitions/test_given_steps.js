@@ -18,6 +18,12 @@ let testGivenStepDefinitions = function () {
             return this.testFacades.evalInfrastructureFiles(fileMatcher, path, stringMatcher, expectedResult);
         });
 
+
+    this.Given(/^All (?:scenarios|features) in (.+?) adhere to (.+?) rule$/,
+        /** @this {TestCucumberWorld} */
+        function (path, rule) {
+            return this.testFacades.validateRule(path, rule);
+        });
 };
 
 module.exports = testGivenStepDefinitions;
