@@ -1,5 +1,12 @@
 
 /**
+ * @typedef {object} MetaTestConfiguration
+ * @property {TestCucumberParserConfiguration} cucumberParser
+ */
+
+
+
+/**
  * Returns the test overrides to the config object
  * @return {{}}
  */
@@ -28,6 +35,11 @@ let testConfig = function getMasterConfig() {
         },
         infra : {
 
+        },
+        test : {
+            cucumberParser : {
+                cacheStepDefinitions : 'src/features/step_definitions'
+            }
         }
     };
 

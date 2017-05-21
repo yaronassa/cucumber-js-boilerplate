@@ -3,47 +3,9 @@
  * @property {TestRunnerConfiguration} testRunner Configuration options for the test runner
  * @property {InfrastructureConfiguration} infra Configuration options for the actual infrastructure
  * @property {BuildConfiguration} build Information on the build this run operation in (if applicable)
+ * @property {MetaTestConfiguration} test Configuration options for the project's meta-test suite
  */
 
-/**
- * @typedef {object} TestRunnerConfiguration
- * @property {boolean} debugMode Run cucumber in debug mode (=in process)
- * @property {('local'|'integration','projectBuild')} runType The main category of this test run
- * @property {boolean} skipFailedRerun **SKIP** processing the failed-rerun file
- * @property {boolean} dryRun Is this a cucumber dry run (nothing is actually run)
- * @property {boolean} metaTestRun Is this a run that tests the automation infrastructure internals
- * @property {boolean} printConfig Should we print the run config
- * @property {TestRunnerReportConfiguration[]} reports Configuration for the runner report
- * @property {TestRunnerCucumberConfiguration} cucumber Configuration for the cucumber engine
- */
-
-/**
- * @typedef {object} TestRunnerReportConfiguration
- * @property {string} name The plugin user friendly name
- * @property {string} pluginFileName The plugin file to require (expected to be in runHelpers/reportPlugins)
- */
-
-/**
- * @typedef {object} TestRunnerCucumberConfiguration
- * @property {string[]} defaultTagArgs Default tags to run
- * @property {string[]} defaultRunArgs Default run arguments to be passed to the cucumber CLI
- * @property {string[]} passThroughArgs Process arguments to pass to the CLI if present (beside --tags arguments)
- * @property {boolean} ignoreHooks Cucumber should skip / run hooks
- * @property {boolean} strict Run in strict mode (undefined steps throw the entire run)
- * @property {string} rerunFile The expected cucumber rerun file
- * @property {string} resultFile The path to the cucumber output file
- */
-
-/**
- * @typedef {object} BuildConfiguration
- * @property {number} [buildNumber] The current build number (if applicable)
- * @property {string} [triggeredBy] Who triggered this build (if applicable)
- */
-
-/**
- * @typedef {object} InfrastructureConfiguration
- * @property {InfraTestEnvironmentConfiguration} testEnvironment Configurations relating to the test environment
- */
 
 /**
  * @typedef {object} InfraTestEnvironmentConfiguration
@@ -99,6 +61,9 @@ let getMasterConfig = function getMasterConfig() {
             testEnvironment : {
                 cleanCreatedEntities : true
             }
+        },
+        test : {
+            
         }
     };
     

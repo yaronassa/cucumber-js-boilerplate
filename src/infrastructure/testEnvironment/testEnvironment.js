@@ -96,7 +96,7 @@ class TestEnvironment {
     _deleteScenarioEntities(){
         let _self = this;
         
-        if (!this._infra.config.infra.testEnvironment.cleanCreatedEntities) {
+        if (!this._infra.config.testEnvironment.cleanCreatedEntities) {
             this._infra.log('Skipping entity cleanup due to config setting');
             return Promise.resolve();
         }

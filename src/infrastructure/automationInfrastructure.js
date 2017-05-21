@@ -1,3 +1,10 @@
+
+/**
+ * @typedef {object} InfrastructureConfiguration
+ * @property {InfraTestEnvironmentConfiguration} testEnvironment Configurations relating to the test environment
+ */
+
+
 /**
  * Singleton marker
  * @type {AutomationInfrastructure}
@@ -41,11 +48,19 @@ class AutomationInfrastructure {
     }
 
     /**
-     * The current run configuration
+     * The current run configuration (entire config tree)
      * @returns {TestAutomationConfiguration}
      */
-    get config(){
+    get allConfig(){
         return this._config;
+    }
+
+    /**
+     * The current infra configuration
+     * @returns {InfrastructureConfiguration}
+     */
+    get config(){
+        return this._config.infra;
     }
 
     /**

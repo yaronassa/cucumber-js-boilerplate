@@ -1,4 +1,40 @@
 /**
+ * @typedef {object} TestRunnerConfiguration
+ * @property {boolean} debugMode Run cucumber in debug mode (=in process)
+ * @property {('local'|'integration','projectBuild')} runType The main category of this test run
+ * @property {boolean} skipFailedRerun **SKIP** processing the failed-rerun file
+ * @property {boolean} dryRun Is this a cucumber dry run (nothing is actually run)
+ * @property {boolean} metaTestRun Is this a run that tests the automation infrastructure internals
+ * @property {boolean} printConfig Should we print the run config
+ * @property {TestRunnerReportConfiguration[]} reports Configuration for the runner report
+ * @property {TestRunnerCucumberConfiguration} cucumber Configuration for the cucumber engine
+ */
+
+/**
+ * @typedef {object} TestRunnerReportConfiguration
+ * @property {string} name The plugin user friendly name
+ * @property {string} pluginFileName The plugin file to require (expected to be in runHelpers/reportPlugins)
+ */
+
+/**
+ * @typedef {object} TestRunnerCucumberConfiguration
+ * @property {string[]} defaultTagArgs Default tags to run
+ * @property {string[]} defaultRunArgs Default run arguments to be passed to the cucumber CLI
+ * @property {string[]} passThroughArgs Process arguments to pass to the CLI if present (beside --tags arguments)
+ * @property {boolean} ignoreHooks Cucumber should skip / run hooks
+ * @property {boolean} strict Run in strict mode (undefined steps throw the entire run)
+ * @property {string} rerunFile The expected cucumber rerun file
+ * @property {string} resultFile The path to the cucumber output file
+ */
+
+/**
+ * @typedef {object} BuildConfiguration
+ * @property {number} [buildNumber] The current build number (if applicable)
+ * @property {string} [triggeredBy] Who triggered this build (if applicable)
+ */
+
+
+/**
  * @typedef {object} CucumberRunArguments
  * @property {{isFailedRerun: boolean, skipFailedRerun: boolean, hasRerunFile: boolean}} rerun
  * @property {boolean} isDryRun
@@ -9,6 +45,8 @@
  * @property {{slackReportChannel: string, slackTitle : string}} report
  * @property {boolean} debugMode
  */
+
+
 
 let Promise = require('bluebird');
 
@@ -35,18 +73,18 @@ class CucumberRun {
         };
 
         /** @type {TestAutomationConfiguration} */
-        this._configuration = this.getConfiguration();
+        this._configuration = configurationReader.getConfig();
         this._initArgs = process.argv;
 
         this._processConfiguration();
     }
 
     /**
-     * Returns the relevant configuration
-     * @protected
+     * Access the test runner config
+     * @returns {TestRunnerConfiguration} The test runner configuration
      */
-    getConfiguration() {
-        return configurationReader.getConfig();
+    get testRunnerConfig() {
+        return this._configuration.testRunner;
     }
 
     /**
@@ -67,7 +105,7 @@ class CucumberRun {
      * @private
      */
     _hasRerunFile(){
-        let rerunFile = this._configuration.testRunner.cucumber.rerunFile;
+        let rerunFile = this.testRunnerConfig.cucumber.rerunFile;
         return (fs.existsSync(`./${rerunFile}`) && fs.readFileSync(`./${rerunFile}`).toString().trim() !== '');
     }
 
@@ -78,7 +116,7 @@ class CucumberRun {
      */
     _calculateFailedRerun(){
         
-        if (this._configuration.testRunner.isMetaTestRun) {
+        if (this.testRunnerConfig.isMetaTestRun) {
             console.log('Skipping failed-rerun:  This is a meta-test run.\n');
             return false;
         }
@@ -88,12 +126,12 @@ class CucumberRun {
             return false;
         }
 
-        if (this._configuration.testRunner.skipFailedRerun) {
+        if (this.testRunnerConfig.skipFailedRerun) {
             console.log('Skipping failed-rerun:    Run was initiated with --skipFailedRerun\n');
             return false;
         }
 
-        if ((this._configuration.testRunner.runType === 'integration')) {
+        if ((this.testRunnerConfig.runType === 'integration')) {
             console.log('Skipping failed-rerun:    Integration run was triggered by ' + this._configuration.build.triggeredBy + '\n');
             return false;
         }
@@ -109,14 +147,14 @@ class CucumberRun {
     _calculateOutputArgs() {
         let outputArgs = ['-f', 'summary'];
 
-        if (this._configuration.testRunner.cucumber.rerunFile) {
+        if (this.testRunnerConfig.cucumber.rerunFile) {
             outputArgs.push('-f');
-            outputArgs.push(`rerun:${this._configuration.testRunner.cucumber.rerunFile}`);
+            outputArgs.push(`rerun:${this.testRunnerConfig.cucumber.rerunFile}`);
         }
 
-        if (this._configuration.testRunner.cucumber.resultFile) {
+        if (this.testRunnerConfig.cucumber.resultFile) {
             outputArgs.push('-f');
-            outputArgs.push(`json:${this._configuration.testRunner.cucumber.resultFile}`);
+            outputArgs.push(`json:${this.testRunnerConfig.cucumber.resultFile}`);
         }
 
         return outputArgs;
@@ -128,8 +166,8 @@ class CucumberRun {
      * @protected
      */
     _calculateRunArgs(){
-        let defaultPassThroughArgs = this._configuration.testRunner.cucumber.passThroughArgs;
-        let defaultRunArgs = this._configuration.testRunner.cucumber.defaultRunArgs;
+        let defaultPassThroughArgs = this.testRunnerConfig.cucumber.passThroughArgs;
+        let defaultRunArgs = this.testRunnerConfig.cucumber.defaultRunArgs;
         
         let passThroughArgs = this._initArgs.filter(arg => (defaultPassThroughArgs.indexOf(arg) >= 0));
         
@@ -138,7 +176,7 @@ class CucumberRun {
         let isFailedRerun = this._calculateFailedRerun();
         
         if (isFailedRerun) {
-            let rerunFile = this._configuration.testRunner.cucumber.rerunFile;
+            let rerunFile = this.testRunnerConfig.cucumber.rerunFile;
 
             console.log(`** Performing failed rerun **\n${rerunFile} contents: \n${fs.readFileSync(`./${rerunFile}`)}\n\n`);
             tagArgs = [];
@@ -158,7 +196,7 @@ class CucumberRun {
      * @protected
      */
     _calculateTagArgs(){
-        let defaultTagArgs = this._configuration.testRunner.cucumber.defaultTagArgs;
+        let defaultTagArgs = this.testRunnerConfig.cucumber.defaultTagArgs;
         
         let tagArgs = this._initArgs.filter(arg => arg.startsWith('--tags='));
       
@@ -204,11 +242,11 @@ class CucumberRun {
      * @returns {Promise<{result: boolean, stdout: string, stderr : string}>}
      */
     doRun(){
-        if (this._configuration.testRunner.printConfig) console.log(`Running with options: ${JSON.stringify(this._configuration.testRunner, null, 1)} \n\n`);
+        if (this.testRunnerConfig.printConfig) console.log(`Running with options: ${JSON.stringify(this._configuration.testRunner, null, 1)} \n\n`);
         
         let runTarget;
 
-        if (this._configuration.testRunner.debugMode) {
+        if (this.testRunnerConfig.debugMode) {
             runTarget = this._runCucumberInProcess();
         } else {
             runTarget = this._runCucumberExternally();
@@ -318,7 +356,7 @@ class CucumberRun {
     produceReports(){
         let _self = this;
         
-        return Promise.mapSeries(this._configuration.testRunner.reports, report => {
+        return Promise.mapSeries(this.testRunnerConfig.reports, report => {
             if (report.enabled === false) return Promise.resolve();
             return Promise.try(function(){
                 /** @type {AbstractReportPlugin} */
@@ -334,7 +372,7 @@ class CucumberRun {
      * @param {{result: boolean, stdout: string, stderr : string}} runOutput The actual run output
      */
     processOutput(runOutput){
-        let expectedResultFile = this._configuration.testRunner.cucumber.resultFile;
+        let expectedResultFile = this.testRunnerConfig.cucumber.resultFile;
 
         this.result.completed = true;
         this.result.succeeded = runOutput.result;
