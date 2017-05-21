@@ -47,6 +47,8 @@ Besides providing automation facades, `.testCucumberFacades` also provides acces
 **Please note** - The meta-test infrastructure is only loaded when the `config/testConfig.js` configuration file is loaded. 
 It's not part of the regular infrastructure run lifecycle.
 
+You can read about the Meta-Test framework in detail in the [meta-test readme](metaTest_readme.md).
+
 ## Run lifecycle
 
 When a regular test suite runs, i.e. when launching `./testRunner.js`, the following sequence is executed (directories may change if the relevant configuration options are overridden):

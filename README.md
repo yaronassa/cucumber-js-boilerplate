@@ -161,6 +161,13 @@ Testables support variable modifiers that can change their behaviour. These incl
 
 These capabilities are demonstrated in `src/features/demo/3. demo_variables.feature`.
 
+##### Meta-Test framework
+The project is bundled with a built-in meta-test framework, which allows you to test the infrastructure code and features via reflection.
+
+These capabilities are demonstrated in `src/features/demo/2. demo_meta.feature` and in `test/testFeatures/testDemo/testDemoFeature.feature`.
+
+You can read about the Meta-Test framework in detail in the [meta-test readme](metaTest_readme.md).
+
 ## Slow start - Technical Overview
 
 A comprehensive technical overview is available in the [technical readme](technical_readme.md). 
