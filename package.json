@@ -12,7 +12,7 @@
   "dependencies": {
     "bluebird": "latest",
     "cucumber": "^1.3.3",
-    "cucumber-html-report": "^0.5.7",
+    "cucumber-html-report": "^0.6.0",
     "deep-assign": "^2.0.0",
     "fs-extra": "latest",
     "moment": "^2.18.1",
