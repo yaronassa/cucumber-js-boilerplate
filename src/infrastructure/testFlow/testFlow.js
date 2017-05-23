@@ -56,7 +56,7 @@ class TestFlow {
                     pendingErrors : []
                 };
 
-                _self._infra.log(`Entering Feature: ${feature.getName()}`, 'log', 'open');
+                _self._infra.log(`Entering Feature: ${feature.name}`, 'log', 'open');
                 
                 let hookActions = [];
                 
@@ -69,7 +69,7 @@ class TestFlow {
                     status : 'Passed'
                 };
 
-                _self._infra.log(`Entering Scenario: ${scenario.getName()}`, 'log', 'open');
+                _self._infra.log(`Entering Scenario: ${scenario.name}`, 'log', 'open');
 
                 let hookActions = [
                     function data(){return _self._infra.data.beforeScenarioActions();},
@@ -79,7 +79,7 @@ class TestFlow {
                 return _self._runHookActions(hookActions, 'BeforeScenario', true);
             },
             BeforeStep : function beforeStepHook(step){
-                if (step.getKeyword().match(/^after */i)) return Promise.resolve();
+                if (step.keyword.match(/^after */i)) return Promise.resolve();
 
                 _self._currentState.currentStep = {
                     cucumberPayload : step,
@@ -87,24 +87,24 @@ class TestFlow {
                     status : 'Passed'
                 };
 
-                _self._infra.log(`Entering Step: ${step.getName()}`, 'log', 'open');
+                _self._infra.log(`Entering Step: ${step.name}`, 'log', 'open');
 
                 let hookActions = [];
 
                 return _self._runHookActions(hookActions, 'BeforeStep');
             },
             StepResult : function stepResultHook(stepResult){
-                if (stepResult.getStep().getKeyword().match(/^after *$/i)) return Promise.resolve();
+                if (stepResult.step.keyword.match(/^after *$/i)) return Promise.resolve();
                 
-                let duration = (stepResult.getDuration()/1000/1000/1000).toFixed(2);
-                let status = stepResult.getStatus().charAt(0).toUpperCase() + stepResult.getStatus().slice(1);
+                let duration = (stepResult.duration/1000).toFixed(2);
+                let status = stepResult.status.charAt(0).toUpperCase() + stepResult.status.slice(1);
                 
-                let error = stepResult.getFailureException();
+                let error = stepResult.failureException;
                 if (error) _self._infra.log(error.message, 'error');
                 
                 _self._infra.log(`Step status: ${status}, duration = ${duration}s`, 'log', 'close');
 
-                _self._currentState.currentScenario.status = TestFlow.nextCucumberStatus(_self._currentState.currentScenario.status, stepResult.getStatus());
+                _self._currentState.currentScenario.status = TestFlow.nextCucumberStatus(_self._currentState.currentScenario.status, stepResult.status);
 
                 let hookActions = [];
 
