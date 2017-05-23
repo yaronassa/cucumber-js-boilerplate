@@ -260,7 +260,7 @@ class CucumberRun {
 
     /**
      * Runs cucumber as a CLI object in an externally spawned process
-     * @return {Promise.<number>} The CLI exit code
+     * @return {Promise.<{result: boolean, stderr: string, stdout: string}>} The CLI exit data
      * @private
      */
     _runCucumberExternally(){
@@ -327,7 +327,7 @@ class CucumberRun {
 
     /**
      * Runs cucumber as a CLI object in the current process
-     * @return {Promise.<number>} The CLI exit code
+     * @return {Promise.<{result: boolean, stderr: string, stdout: string}>} The CLI exit code
      * @private
      */
     _runCucumberInProcess(){
@@ -338,7 +338,7 @@ class CucumberRun {
         return new Promise(function (resolve, reject) {
             try {
                 return cli.run()
-                    .then(resolve)
+                    .then(result => resolve({result, stdout: '', stderr: ''})) //TODO: better stream management
                     .catch(reject);
             } catch (e) {
                 return reject(e);
@@ -347,7 +347,7 @@ class CucumberRun {
         }).catch(e => {
             console.log('Catastrophic failure: ' + e.message);
 
-            return Promise.resolve(1);
+            return Promise.resolve({result: false, stdout: '', stderr: e.message});
         });
 
     }
