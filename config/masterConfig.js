@@ -50,7 +50,7 @@ let getMasterConfig = function getMasterConfig() {
             cucumber : {
                 defaultTagArgs : '--tags=not @debug',
                 defaultRunArgs : ['-r', './src/features', './src/features'],
-                passThroughArgs : ['-d', '--strict', '--nohooks'],
+                passThroughArgs : ['-d',  '--dry-run','--no-strict'],
                 ignoreHooks : false,
                 strict : false,
                 rerunFile : '@rerun.txt',

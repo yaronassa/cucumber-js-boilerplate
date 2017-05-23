@@ -218,6 +218,9 @@ class TestFlow {
      * @param {{registerHandler: function(string, object, function)}} hooksManager cucumber's registerHandler function
      */
     mapCucumberHooks(hooksManager){
+        
+        if (this._infra.allConfig.testRunner.cucumber.ignoreHooks) return;
+        
         let standardHookOptions = {timeout : 30 * 60 * 1000};
         let specificHookOptions = {After : {timeout: 30 * 60 * 1000}};
         

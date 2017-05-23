@@ -16,7 +16,10 @@ class ConfigReader {
     static _overrideSpecialConfigParams (currentConfig){
         let initArgs = process.argv;
         
-        if (initArgs.some(arg => arg === '-d')) currentConfig.testRunner.dryRun = true;
+        if (initArgs.some(arg => arg === '-d')) {
+            currentConfig.testRunner.dryRun = true;
+            currentConfig.testRunner.cucumber.ignoreHooks = true;
+        }
         if (initArgs.some(arg => arg === '--nohooks')) currentConfig.testRunner.cucumber.ignoreHooks = true;
         if (initArgs.some(arg => arg === '--strict')) currentConfig.testRunner.cucumber.strict = true;
         
