@@ -1,5 +1,5 @@
-let configure = function () {
-    this.setDefaultTimeout(90 * 1000);
-};
+let {defineSupportCode} = require('cucumber');
 
-module.exports = configure;
+defineSupportCode(function({setDefaultTimeout}) {
+    setDefaultTimeout(90 * 1000);
+});

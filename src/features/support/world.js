@@ -1,3 +1,4 @@
+let {defineSupportCode} = require('cucumber');
 let infrastructure = new (require('../../infrastructure/automationInfrastructure'))();
 
 /**
@@ -9,7 +10,6 @@ function CucumberWorld() {
     this.facades = infrastructure.cucumberFacades;
 }
 
-module.exports = function() {
-    //noinspection JSUnresolvedVariable
-    this.World = CucumberWorld;
-};
+defineSupportCode(function({setWorldConstructor}) {
+    setWorldConstructor(CucumberWorld);
+});
