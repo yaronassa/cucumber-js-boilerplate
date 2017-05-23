@@ -76,10 +76,10 @@ class ConfigReader {
                     break;
             }
 
-            configPath.every(function overrideConfigPath(currentPath, index) {
+            configPath.every(function overrideConfigPath(currentPath, index, arr) {
                 if (target[currentPath] === undefined) return false;
 
-                if (index === currentPath.length - 1) {
+                if (index === arr.length - 1) {
                     target[currentPath] = configValue;
                 } else {
                     target = target[currentPath];
