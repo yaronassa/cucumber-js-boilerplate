@@ -7,7 +7,8 @@
   "scripts": {
     "lint": "./node_modules/eslint/bin/eslint.js ./",
     "test": "node ./testRunner.js -d --strict --nohooks && node ./testRunner.js --configFile=testConfig.js",
-    "start": "node ./testRunner.js"
+    "start": "node ./testRunner.js",
+    "cloc": "cloc ./ --exclude-dir node_modules,.idea,results"
   },
   "dependencies": {
     "bluebird": "latest",
