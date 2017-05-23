@@ -6,13 +6,15 @@
 
 let Promise = require('bluebird');
 let runArgs = require('../../temp/currentRunArgs.json');
-let cli = require('cucumber').Cli(runArgs);
+let cli = new (require('cucumber').Cli)({argv: runArgs, cwd: process.cwd(), stdout: process.stdout});
 
-return new Promise(function (resolve) {
-    return cli.run(function(result){
-        let exitCode = (result === true) ? 0 : 1;
-        return resolve(exitCode);
-    });
+return new Promise(function (resolve, reject) {
+    try {
+        return cli.run()
+            .then(success => resolve((success === true) ? 0 : 1));
+    } catch (e) {
+        return reject(e);
+    }
 }).catch(e => {
     console.log('Catastrophic failure: ' + e.message);
 

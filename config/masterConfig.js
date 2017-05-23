@@ -48,8 +48,8 @@ let getMasterConfig = function getMasterConfig() {
                 enabled : false //enabled one slack is setup
             }],
             cucumber : {
-                defaultTagArgs : ['--tags=~@debug', '--tags=~@skip'],
-                defaultRunArgs : ['-r', './src/infrastructure',  '-r', './src/features', './src/features'],
+                defaultTagArgs : '--tags=not @debug',
+                defaultRunArgs : ['-r', './src/features', './src/features'],
                 passThroughArgs : ['-d', '--strict', '--nohooks'],
                 ignoreHooks : false,
                 strict : false,

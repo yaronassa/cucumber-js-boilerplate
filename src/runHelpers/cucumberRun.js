@@ -18,7 +18,7 @@
 
 /**
  * @typedef {object} TestRunnerCucumberConfiguration
- * @property {string[]} defaultTagArgs Default tags to run
+ * @property {string} defaultTagArgs Default tags to run
  * @property {string[]} defaultRunArgs Default run arguments to be passed to the cucumber CLI
  * @property {string[]} passThroughArgs Process arguments to pass to the CLI if present (beside --tags arguments)
  * @property {boolean} ignoreHooks Cucumber should skip / run hooks
@@ -93,10 +93,10 @@ class CucumberRun {
      */
     _processConfiguration(){
 
-        this._tagArgs = this._calculateTagArgs();
+        this._tagArg = this._calculateTagArg();
         this._runArgs = this._calculateRunArgs();
 
-        console.log(this._tagArgs.reduce((acc, tagArg) => {return acc + '\n  ' + tagArg.replace('--tags=', '');}, '\n\nRunning features with tags:') + '\n');
+        console.log(`\n\nRunning features with tags:${this._tagArg.replace('--tags=', '')}\n`);
     }
 
     /**
@@ -171,7 +171,7 @@ class CucumberRun {
         
         let passThroughArgs = this._initArgs.filter(arg => (defaultPassThroughArgs.indexOf(arg) >= 0));
         
-        let tagArgs = this._tagArgs;
+        let tagArg = this._tagArg;
         
         let isFailedRerun = this._calculateFailedRerun();
         
@@ -179,7 +179,7 @@ class CucumberRun {
             let rerunFile = this.testRunnerConfig.cucumber.rerunFile;
 
             console.log(`** Performing failed rerun **\n${rerunFile} contents: \n${fs.readFileSync(`./${rerunFile}`)}\n\n`);
-            tagArgs = [];
+            tagArg = '';
             defaultRunArgs.pop();
             defaultRunArgs.push(rerunFile);
         }
@@ -187,18 +187,20 @@ class CucumberRun {
         let outputArgs = this._calculateOutputArgs();
 
 
-        return [].concat(defaultRunArgs).concat(tagArgs).concat(passThroughArgs).concat(outputArgs);
+        return [].concat(defaultRunArgs).concat(tagArg.split('=')).concat(passThroughArgs).concat(outputArgs);
     }
 
     /**
      * Calculates the run tag args
-     * @returns {string[]}
+     * @returns {string}
      * @protected
      */
-    _calculateTagArgs(){
+    _calculateTagArg(){
         let defaultTagArgs = this.testRunnerConfig.cucumber.defaultTagArgs;
         
-        let tagArgs = this._initArgs.filter(arg => arg.startsWith('--tags='));
+        let sentTagArgs = this._initArgs.filter(arg => arg.startsWith('--tags='));
+        
+        if (sentTagArgs.length > 1) throw new Error('More than 1 --tags parameter. Please migrate to the new tag expressions format.\nSee: https://docs.cucumber.io/tag-expressions/');
       
         switch (this._configuration.build.triggeredBy) {
             //Mutate tag args according to the trigger
@@ -206,10 +208,11 @@ class CucumberRun {
                 break;
         }
         
-        if (tagArgs.length === 0) tagArgs = [].concat(defaultTagArgs);
-        if (tagArgs.indexOf('--tags=~@skip') < 0) tagArgs.push('--tags=~@skip');
+        let tagArg = (sentTagArgs.length === 0) ? defaultTagArgs : sentTagArgs[0];
+        
+        if (tagArg.indexOf('not @skip') < 0) tagArg = `${tagArg} and not @skip`;
 
-        return tagArgs;
+        return tagArg;
     }
 
     /**
@@ -330,13 +333,13 @@ class CucumberRun {
     _runCucumberInProcess(){
         console.log('\n\n************************ Starting In-Process Cucumber Run ************************\n\n');
 
-        let cli = require('cucumber').Cli(this._runArgs);
-
+        let cli = new (require('cucumber').Cli)({argv : this._runArgs, cwd: process.cwd(), stdout: process.stdout});
+        
         return new Promise(function (resolve, reject) {
             try {
-                return cli.run(function(result){
-                    return resolve({result});
-                });
+                return cli.run()
+                    .then(resolve)
+                    .catch(reject);
             } catch (e) {
                 return reject(e);
             }
