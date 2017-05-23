@@ -1,6 +1,8 @@
+let {defineSupportCode} = require('cucumber');
+
 /**
  * Demo steps for entity management
- * @type {{Given : function(RegExp, function)}}
+ * @type  {{Then : function(RegExp, function), When : function(RegExp, function), And : function(RegExp, function), call: function}} cucumberCore
  */
 let demoEntitiesSteps = function () {
 
@@ -35,4 +37,8 @@ let demoEntitiesSteps = function () {
         });
 };
 
-module.exports = demoEntitiesSteps;
+
+defineSupportCode(function(cucumberCore){
+    //For intellij cucumber auto-complete
+    return demoEntitiesSteps.call(cucumberCore);
+});

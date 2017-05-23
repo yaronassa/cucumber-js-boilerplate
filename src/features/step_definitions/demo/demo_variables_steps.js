@@ -1,6 +1,8 @@
+let {defineSupportCode} = require('cucumber');
+
 /**
  * Demo steps for variable examples
- * @type {{Given : function(RegExp, function)}}
+ * @type {{Given : function(RegExp, function), call: function}}
  */
 let demoVariablesSteps = function () {
 
@@ -27,4 +29,8 @@ let demoVariablesSteps = function () {
         });
 };
 
-module.exports = demoVariablesSteps;
+
+defineSupportCode(function(cucumberCore){
+    //For intellij cucumber auto-complete
+    return demoVariablesSteps.call(cucumberCore);
+});

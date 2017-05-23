@@ -1,6 +1,8 @@
+let {defineSupportCode} = require('cucumber');
+
 /**
  * General purpose demo steps
- * @type {{Given : function(RegExp, function)}}
+ * @type {{Given : function(RegExp, function), call: function}}
  */
 let demoGeneralSteps = function () {
 
@@ -40,4 +42,8 @@ let demoGeneralSteps = function () {
         });
 };
 
-module.exports = demoGeneralSteps;
+
+defineSupportCode(function(cucumberCore){
+    //For intellij cucumber auto-complete
+    return demoGeneralSteps.call(cucumberCore);
+});

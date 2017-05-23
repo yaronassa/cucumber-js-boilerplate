@@ -1,6 +1,8 @@
+let {defineSupportCode} = require('cucumber');
+
 /**
  * Shared given steps
- * @type {{Given : function(RegExp, function)}}
+ * @type {{Given : function(RegExp, function), call: funciton}} cucumberCore
  */
 let testGivenStepDefinitions = function () {
 
@@ -9,7 +11,7 @@ let testGivenStepDefinitions = function () {
         function demoGivenStep() {
             return this.testFacades.testDemoGivenStep();
         });
-    
+
     this.Given(/^All (.+?)? *files in (.+?) (do(?:n't| not))? *contains? the string: (.+?)$/,
         /** @this {TestCucumberWorld} */
         function (fileMatcher, path, expectedResult, stringMatcher) {
@@ -26,4 +28,8 @@ let testGivenStepDefinitions = function () {
         });
 };
 
-module.exports = testGivenStepDefinitions;
+
+defineSupportCode(function(cucumberCore){
+    //For intellij cucumber auto-complete
+    return testGivenStepDefinitions.call(cucumberCore);
+});

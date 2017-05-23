@@ -1,8 +1,20 @@
+let {defineSupportCode} = require('cucumber');
+
 /**
  * Steps for debugging
- * @type {{Given : function(RegExp, function), Then : function(RegExp, function), When : function(RegExp, function), And : function(RegExp, function)}}
+ * @type  {{Given : function(RegExp, function), call: function}} cucumberCore
  */
 let sharedGivenStepDefinitions = function () {
+
+
+    this.defineParameterType({
+        regexp: /baby/,
+        typeName: 'baby',
+        transformer(value){
+            return value + value + value;
+        }
+    });
+
 
     this.Given(/^Eval code (.+)$/,
         /**
@@ -15,4 +27,9 @@ let sharedGivenStepDefinitions = function () {
         });
 };
 
-module.exports = sharedGivenStepDefinitions;
+
+defineSupportCode(function(cucumberCore){
+    //For intellij cucumber auto-complete
+    return sharedGivenStepDefinitions.call(cucumberCore);
+});
+
