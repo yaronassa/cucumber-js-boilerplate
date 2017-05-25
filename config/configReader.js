@@ -35,7 +35,7 @@ class ConfigReader {
     
     /**
      * Returns the aggregated config object from all the files and parameters
-     * @param {string[]|string} [configFiles] Ability to add config files directly
+     * @param {string[]|string} [directConfigFiles] Ability to add config files directly
      * @returns {TestAutomationConfiguration}
      */
     static getConfig (directConfigFiles){

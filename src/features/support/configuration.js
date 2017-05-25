@@ -1,3 +1,5 @@
+//Configures default step settings
+
 let {defineSupportCode} = require('cucumber');
 
 defineSupportCode(function({setDefaultTimeout}) {

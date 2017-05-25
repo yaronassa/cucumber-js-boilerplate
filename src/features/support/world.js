@@ -1,3 +1,5 @@
+//Exposes infrastructure facades in cucumber world object
+
 let {defineSupportCode} = require('cucumber');
 let infrastructure = new (require('../../infrastructure/automationInfrastructure'))();
 
