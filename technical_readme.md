@@ -121,7 +121,7 @@ Creating this class will recursively create and initialize the entire infrastruc
 - Handles the test flow, and keeps records of test phase durations, statuses and exceptions.
 - The `TestFlow._hooksHandlers` structure houses functions that are called by the cucumber hook with the corresponding name.
 - Most `TestFlow._hooksHandlers` functions have an array of hook actions to perform (**must** return a promise), that are called sequentially by `TestFlow._runHookActions`. 
-- The `TestFlowMetaHelpers` class contains utils that manipulate the way the test flows and response to commands. These utils replace CucumberFacade functions with proxies that manipulate their inputs, outputs and success criteria (for example, flip future step results when using "The next N steps should fail" step).
+- The `TestFlowMetaHelpers` class contains utils that manipulate the way the test flows and response to commands. These utils run cucumber step-functions through a processing pipeline that can alter their results and success criteria (for example, flip future step results when using "The next N steps should fail" step).
 
 **Notable cucumber hooks**:
 - BeforeFeatures - The first hook that's called and executed. Used as the infrastructure's a-synchronous init hook (environment building, listener inits, etc.). This is the only hook that stops the entire run if it fails.
