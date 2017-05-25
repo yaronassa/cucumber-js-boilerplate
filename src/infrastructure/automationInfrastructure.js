@@ -27,6 +27,8 @@ class AutomationInfrastructure {
         // eslint-disable-next-line consistent-this
         if (!singletonInfrastructure) singletonInfrastructure = this;
 
+        this._config = configurationReader.getConfig();
+
         /** @type {Assert} */
         this.assert = new (require('./assert/assert'))(this);
         /** @type {CucumberFacades} */
@@ -43,8 +45,6 @@ class AutomationInfrastructure {
         this.logic = new (require('./logic/logic'))(this);
         /** @type {Services} */
         this.services = new (require('./services/services'))(this);
-        
-        this._config = configurationReader.getConfig();
     }
 
     /**
