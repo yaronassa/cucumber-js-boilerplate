@@ -51,11 +51,11 @@ class TestFlowMetaHelpers {
      * @param {string} wrapperGUID
      * @private
      */
-    _removeWrapperFromPipelines(wrapperGUID){
+    _removeWrapperFromPipelines(wrapperGUID) {
         let postIndex = this._postProcessors.findIndex(func => func.GUID === wrapperGUID);
-        if (postIndex) this._postProcessors.splice(postIndex, 1);
+        if (postIndex > -1) this._postProcessors.splice(postIndex, 1);
         let preIndex = this._preProcessors.findIndex(func => func.GUID === wrapperGUID);
-        if (preIndex) this._preProcessors.splice(preIndex, 1);
+        if (preIndex > -1) this._preProcessors.splice(preIndex, 1);
     }
 
     /**
@@ -68,7 +68,6 @@ class TestFlowMetaHelpers {
      * @private
      */
     _insertProcessorToPipeline(pipeline, processorFunction, skipForCurrentStep=true, GUID=uuidV4()){
-        processorFunction.GUID = GUID;
         let skip = skipForCurrentStep;
         
         let skippableProcessor = function(){
@@ -77,6 +76,7 @@ class TestFlowMetaHelpers {
             skip = false;
             return arguments;
         };
+        skippableProcessor.GUID = GUID;
         
         if (!/(postProcessors|preProcessors)/.test(pipeline)) throw new Error(`Unknown MeteHelper pipeline "_${pipeline}".`);
         
