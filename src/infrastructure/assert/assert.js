@@ -29,7 +29,7 @@ class Assert {
         
         expectedSpec.forEach(field => {
             let fieldName = field.fieldName;
-            let actualValue = specialMutations(fieldName, actual[fieldName]);
+            let actualValue = specialMutations(fieldName, _self._infra.utils.getPropertyRecursive(actual, fieldName));
             let test = _self._infra.utils.variableProcessor.getTestable(field.fieldValue);
             
             //Add more advanced comparisons
