@@ -35,6 +35,8 @@ class EntitiesLogic {
         switch(lowerEntityType){
             case 'user':
             case 'record':
+            case 'random':
+            case 'math':
             case '':
                 return lowerEntityType;
             default:

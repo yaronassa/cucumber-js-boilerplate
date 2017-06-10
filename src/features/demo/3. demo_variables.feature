@@ -14,6 +14,11 @@ Feature: Variable parsing and processing
     And I print ${[string array, demo]}
     And I print ${/RegExp Demo.*/i}
     
+  Scenario: Demonstrating math & random
+    And I print ${=_1+2*3+(4/4)}
+    And I print ${random_20_40}
+    And I print Last random result = ${this_random.result}
+    
   Scenario: Demonstrating testables
     Given I compare a with a
     And I compare a423423432 with ${/(A|B)\d+/i}

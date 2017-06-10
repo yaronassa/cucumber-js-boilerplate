@@ -30,10 +30,70 @@ class VariableProcessor{
          * @private
          */
         this._infra = infra;
+        
+        let _self = this;
+        
+        let generatedIDs = {
+            math: 0,
+            random: 0
+        };
 
 
         //noinspection JSUnusedGlobalSymbols - Called dynamically
         this._variableProcessors = {
+            this(variable){
+                let splitVariable = variable.split('.');
+                splitVariable[0] = splitVariable[0] + '_this';
+                return _self._variableProcessors.createdentities(splitVariable.join('.'));
+            },
+            '='(variable){
+                if (!variable.match(/^[\d+\-*()/ ]+$/)) throw new Error(`Cannot parse variable into math equation: ${variable}`);
+                // eslint-disable-next-line no-eval
+                let result = eval(variable);
+
+                let reference = {
+                    created: true,
+                    type: 'math',
+                    entity: result.toString(),
+                    rawSources: {api: result.toString()},
+                    query: {queryProps: infra.utils.parser.parseFieldPairs(`equation=${variable}`)},
+                    history:[]
+                };
+                
+                _self._infra.data.updateDataWithNewEntity({
+                    id: generatedIDs.math.toString(),
+                    entityType: 'math',
+                    result: result.toString(),
+                    calculation: variable
+                });
+                
+                generatedIDs.math = generatedIDs.math + 1;
+
+                return result.toString();
+
+            },
+            random(variable){
+                let splitVariable = variable.split('_');
+                let min = parseInt(splitVariable[0] || 1);
+                let max = parseInt(splitVariable[1] || 50);
+
+                if (isNaN(max) || isNaN(min)) throw new Error(`Cannot parse min/max numbers for ${variable}`);
+
+                let result = Math.floor(Math.random()*(max-min))+min;
+
+                _self._infra.data.updateDataWithNewEntity({
+                    id: generatedIDs.random.toString(),
+                    entityType: 'random',
+                    result: result.toString(),
+                    min,
+                    max
+                });
+
+                generatedIDs.random = generatedIDs.random + 1;
+
+                return result.toString();
+
+            },
             createdentities(variable){
                 let splitVariable = variable.split('_');
                 let entityType = splitVariable.splice(0,1)[0];
