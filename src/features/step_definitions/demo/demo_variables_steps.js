@@ -7,7 +7,7 @@ let {defineSupportCode} = require('cucumber');
 let demoVariablesSteps = function () {
 
 
-    this.Given( /^I print (.+)$/,
+    this.Given(/^I print (.+)$/,
         /**
          * Prints a value to the log
          * @param {string} value The simple value / variable to print
