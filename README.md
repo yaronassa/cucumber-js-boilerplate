@@ -146,6 +146,7 @@ Variables that are transformed to flat string:
 
 - createdEntities variables - are transformed to the relevant entity's property value. e.g. ${createdEntities_User_#1.name} will be transformed into the first created user's name.
 - date variables - are transformed into today's date, with the requested offset, and a possible output format. e.g ${Date_today_-1_year}, ${Date_today_-1_year_+5_days}, ${Date_today_format_DD/MM}
+- Math & random variables - Are transformed into the string representation of the calculation result. e.g. ${=_1+4*2} will be transformed into the string 9, and ${random_20_25} will be transformed into the string of a number between 20 and 25 (inclusive),
 
 Variables that are transformed to objects:
 

@@ -15,9 +15,8 @@ Feature: Variable parsing and processing
     And I print ${/RegExp Demo.*/i}
     
   Scenario: Demonstrating math & random
-    And I print ${=_1+2*3+(4/4)}
     And I print ${random_20_40}
-    And I print Last random result = ${this_random.result}
+    And I print ${=_${this_random.result}*2 + 3}
     
   Scenario: Demonstrating testables
     Given I compare a with a
