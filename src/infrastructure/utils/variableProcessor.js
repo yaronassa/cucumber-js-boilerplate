@@ -50,15 +50,6 @@ class VariableProcessor{
                 if (!variable.match(/^[\d+\-*()/ ]+$/)) throw new Error(`Cannot parse variable into math equation: ${variable}`);
                 // eslint-disable-next-line no-eval
                 let result = eval(variable);
-
-                let reference = {
-                    created: true,
-                    type: 'math',
-                    entity: result.toString(),
-                    rawSources: {api: result.toString()},
-                    query: {queryProps: infra.utils.parser.parseFieldPairs(`equation=${variable}`)},
-                    history:[]
-                };
                 
                 _self._infra.data.updateDataWithNewEntity({
                     id: generatedIDs.math.toString(),
