@@ -8,7 +8,9 @@
     "lint": "./node_modules/eslint/bin/eslint.js ./",
     "test": "node ./testRunner.js -d && node ./testRunner.js --configFile=testConfig.js",
     "start": "node ./testRunner.js",
-    "cloc": "cloc ./ --exclude-dir node_modules,.idea,results"
+    "cloc": "cloc ./ --exclude-dir node_modules,.idea,results",
+    "decryptPasswords": "node ./passwords/enc_dec.js ./passwords/passwords.enc ./passwords/DEMO_id_rsa ./passwords/outputtedPasswords.json",
+    "encryptPasswords": "node ./passwords/enc_dec.js ./passwords/passwords.json ./passwords/DEMO_id.pub.pem ./passwords/outputtedPasswords.enc"
   },
   "dependencies": {
     "bluebird": "latest",
