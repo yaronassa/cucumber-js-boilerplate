@@ -134,4 +134,5 @@ Creating this class will recursively create and initialize the entire infrastruc
 - `LogHelper` controls the stdout and cucumber out logs, allowing suppression and manipulation of outgoing logs.
 - `Parser` used for unstructured information parsing and processing. Mostly used to break down cucumber steps unstructured information, in order to be sent to validation functions and other utilities.
 - `VariableProcessor` - Used to parse plain-text phrases and expressions from cucumber steps. Most frequent uses: parsing complex data types (arrays, regexps), accessing created entities properties (retrieve claim id, etc.), and constructing assert-test objects in `VariableProcessor.getTestable`, which encapsulates many assertions, tests and comparisons.
+- `passwordManager` - Used to load the decrypted password object from the password file (defaults to `passwords/outputtedPasswords.json`).
 

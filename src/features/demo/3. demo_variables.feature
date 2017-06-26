@@ -27,5 +27,9 @@ Feature: Variable parsing and processing
     And I compare ${[a, b]} with ${contains:${[a]}}
     And I compare a with ${ignoreCase:A}
     And I compare a with ${trim:      a        }
+    
+  Scenario: Demonstrating password variables
+    Then I compare ${passwords_some} with value
+    And I compare ${passwords_some.length} with 5
       
     

@@ -41,6 +41,9 @@ Customize your own behaviors by tracking a working real-world example for markin
 The project comes with some basic utils, allowing you to use scenario data context, parsed variables, indented console-log, and more.
 Or, throw all those to the bin, and write everything by yourself.
 
+#### Built in encrypted passwords/credentials management
+Encrypt your service passwords and credentials with a single command, and commit them with your code.
+Decrypt them with similar ease on deployment, and access them like any other infrastructure variable.
 
 ## Installation
 
@@ -55,7 +58,11 @@ Or, throw all those to the bin, and write everything by yourself.
 - `npm install`
 - `yarn install`
 
-3. **You're good to go**
+3. **Decrypt the demo password file**
+
+- Run `npm run decryptPasswords`
+
+4. **You're good to go**
 
 ## Quick start
 
@@ -147,6 +154,7 @@ Variables that are transformed to flat string:
 - createdEntities variables - are transformed to the relevant entity's property value. e.g. ${createdEntities_User_#1.name} will be transformed into the first created user's name.
 - date variables - are transformed into today's date, with the requested offset, and a possible output format. e.g ${Date_today_-1_year}, ${Date_today_-1_year_+5_days}, ${Date_today_format_DD/MM}
 - Math & random variables - Are transformed into the string representation of the calculation result. e.g. ${=_1+4*2} will be transformed into the string 9, and ${random_20_25} will be transformed into the string of a number between 20 and 25 (inclusive),
+- Password variables - Are transformed into the matching object path specified in `passwords/outputtedPasswords.json`. e.g. ${passwords_some} will be transformed into the string "value" and ${passwords_some.length} into the string "5".
 
 Variables that are transformed to objects:
 

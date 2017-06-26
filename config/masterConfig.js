@@ -60,6 +60,11 @@ let getMasterConfig = function getMasterConfig() {
         infra : {
             testEnvironment : {
                 cleanCreatedEntities : true
+            },
+            utils : {
+                passwordManager: {
+                    passwordFile : '../../passwords/outputtedPasswords.json'
+                }
             }
         },
         test : {

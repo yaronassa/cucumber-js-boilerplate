@@ -44,7 +44,9 @@ class TestFlow {
          */
         this._hooksHandlers = {
             BeforeFeatures : function beforeFeaturesHook(){
-                let hookActions = [];
+                let hookActions = [
+                    function passwordManager(){return infra.utils.passwordManager.beforeFeaturesActions();}
+                ];
                 
                 return _self._runHookActions(hookActions, 'BeforeFeatures', true);
             },

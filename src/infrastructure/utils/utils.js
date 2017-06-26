@@ -1,3 +1,8 @@
+/**
+ * @typedef {object} InfraUtilsConfiguration
+ * @property {{passwordFile: string}} passwordManager
+ */
+
 
 /**
  * Entry point for misc utils and helpers
@@ -20,6 +25,8 @@ class Utils{
         this.parser = new (require('./parser'))(infra);
         /** @type {VariableProcessor} */
         this.variableProcessor = new (require('./variableProcessor'))(infra);
+        /** @type {PasswordManager} */
+        this.passwordManager = new (require('./passwordManager'))(infra);
 
     }
 

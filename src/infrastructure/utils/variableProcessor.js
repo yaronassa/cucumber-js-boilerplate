@@ -41,6 +41,13 @@ class VariableProcessor{
 
         //noinspection JSUnusedGlobalSymbols - Called dynamically
         this._variableProcessors = {
+            password(variable){
+                let passwords = _self._infra.utils.passwordManager.passwords;
+                if (passwords === undefined) throw new Error('No passwords object - cannot process password variables. Did you remember to run "npm run decryptPasswords"?');
+                let result = _self._infra.utils.getPropertyRecursive(passwords, variable.split('.'));
+                return result || '';
+            },
+            passwords(variable){return _self._variableProcessors.password(variable);},
             this(variable){
                 let splitVariable = variable.split('.');
                 splitVariable[0] = splitVariable[0] + '_this';

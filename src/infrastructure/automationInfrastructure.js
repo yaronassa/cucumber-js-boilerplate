@@ -2,6 +2,7 @@
 /**
  * @typedef {object} InfrastructureConfiguration
  * @property {InfraTestEnvironmentConfiguration} testEnvironment Configurations relating to the test environment
+ * @property {InfraUtilsConfiguration} utils Configurations relating to misc utils and helpers
  */
 
 
@@ -45,8 +46,18 @@ class AutomationInfrastructure {
         this.logic = new (require('./logic/logic'))(this);
         /** @type {Services} */
         this.services = new (require('./services/services'))(this);
+        
+        this._rootPath = require('path').resolve(__dirname);
     }
 
+    /**
+     * Returna the root path of the infrastructure object tree
+     * @return {string} The resolved path
+     */
+    get rootPath(){
+        return this._rootPath;
+    }
+    
     /**
      * The current run configuration (entire config tree)
      * @returns {TestAutomationConfiguration}
