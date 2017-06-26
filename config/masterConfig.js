@@ -8,11 +8,6 @@
 
 
 /**
- * @typedef {object} InfraTestEnvironmentConfiguration
- * @property {boolean} [cleanCreatedEntities=true] Removed created entities at the end of the scenario
- */
-
-/**
  * Returns the master config object
  * @return {TestAutomationConfiguration}
  */
@@ -64,6 +59,9 @@ let getMasterConfig = function getMasterConfig() {
             utils : {
                 passwordManager: {
                     passwordFile : '../../passwords/outputtedPasswords.json'
+                },
+                variableProcessor: {
+                    logVariableProcessing: true
                 }
             }
         },

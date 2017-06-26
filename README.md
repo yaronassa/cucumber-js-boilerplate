@@ -186,6 +186,9 @@ Testables support variable modifiers that can change their behaviour. These incl
 
 These capabilities are demonstrated in `src/features/demo/3. demo_variables.feature`.
 
+**Please note** Currently all variable processing is logged and appears in the output.
+You can change this by switching `utils.variableProcessor.logVariableProcessing` to false in `config/masterConfig.js`.
+
 ##### Meta-Test framework
 The project is bundled with a built-in meta-test framework, which allows you to test the infrastructure code and features via reflection.
 

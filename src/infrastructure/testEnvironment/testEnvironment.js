@@ -1,3 +1,10 @@
+
+/**
+ * @typedef {object} InfraTestEnvironmentConfiguration
+ * @property {boolean} [cleanCreatedEntities=true] Removed created entities at the end of the scenario
+ */
+
+
 let Promise = require('bluebird');
 
 /**

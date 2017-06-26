@@ -1,6 +1,7 @@
 /**
  * @typedef {object} InfraUtilsConfiguration
  * @property {{passwordFile: string}} passwordManager
+ * @property {{logVariableProcessing: boolean}} variableProcessor
  */
 
 

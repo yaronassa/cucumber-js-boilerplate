@@ -185,17 +185,24 @@ class VariableProcessor{
      */
     parseObjectVariables(value){
         let innerValue = value.replace(/\$\{(.+)}/g, '$1');
+        
+        let result = undefined;
+        let resultDescription = undefined;
 
         if (innerValue.match(/^\[.*]$/)){ //array
-            return this._infra.utils.parser.safeSplit(innerValue.replace(/^\[(.*)]$/, '$1'), ',').map(item => item.trim())
+            result = this._infra.utils.parser.safeSplit(innerValue.replace(/^\[(.*)]$/, '$1'), ',').map(item => item.trim())
                 .filter(item => item.trim() !== '');
+            resultDescription = 'Array: ' + JSON.stringify(result);
         }
         if (innerValue.match(/^\/.+?\/[igm]*$/)){ //regexp
             let regexpParts = innerValue.match(/^\/(.+?)\/([igm]*)$/);
-            return new RegExp(regexpParts[1], regexpParts[2] || '');
+            result = new RegExp(regexpParts[1], regexpParts[2] || '');
+            resultDescription = 'RegExp: ' + result.toString();
         }
 
-        return undefined;
+        if (result && this._infra.config.utils.variableProcessor.logVariableProcessing) this._infra.log(`Processed ${value}. Result = ${resultDescription}`);
+
+        return result;
     }
 
     /**
@@ -215,7 +222,11 @@ class VariableProcessor{
             throw new Error('Cannot find variable processor for ' + type);
         }
 
-        return this._variableProcessors[type].call(this, splitVariable.join('_'));
+        let result = this._variableProcessors[type].call(this, splitVariable.join('_'));
+        
+        if (this._infra.config.utils.variableProcessor.logVariableProcessing) this._infra.log(`Processed ${variableEnclosure}. Result = ${result}`);
+        
+        return result;
     }
 
     /**
