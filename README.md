@@ -111,6 +111,22 @@ Like facade functions, it's best to leave these connector functions lean, and ju
 
 **Please Note** - Hook action functions MUST return a Promise as their result.
 
+#### Using encrypted passwords
+
+Usually the automation infrastructure needs to access repositories, services and accounts, not all of which have access-keys similar methods of authorization.
+This raises the problem of passwords/credentials management. Should they be committed with the infrastructure code - exposed? Or managed separately, connected to the code via environment variables?
+Each method has its pros and cons.
+
+This boilerplate offers another option - encrypt your passwords with the organization's access-keys, commit them with the code, and decrypt them when deployed to a server / a developer workstation (both usually have the matching private-key for decryption).
+
+This functionality can be seen in the `passwords` directory. For demo purposes, the directory has private-key and the source password file committed to git, but naturally this will not be the case in a real-world scenario.
+ 
+Develop the automation scripts with a `passwords/passwords.json` file, then encrypt it by running `npm run encryptPasswords` (it will use the public key in `DEMO_id.pub.pem`. You can change the npm script to read your organization public key).
+This will create a matching `.enc` password file, that can be committed safely.
+
+Once the project is pulled to the relevant server / workstation, run `npm run decryptPasswords` (it will use the private key in `DEMO_id_rsa`. You can change the npm script to read your organization private key).
+The file will be decrypted into `outputtedPasswords.json`. Once the decrypted file is in place, you can use `${passwords_some.value.path.from.the.file}` to incorporate the information into you script.
+
 ## Normal start
 
 OK, so, you saw the tests run, and you want to know more. Here's some less-than-basic details on the test flow and infrastructure internals:
