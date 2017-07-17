@@ -134,6 +134,7 @@ class TestFlow {
             },
             // eslint-disable-next-line no-unused-vars
             After : function afterScenarioAttachments(scenarioWithAttachments){
+                scenarioWithAttachments.attach = this.attach;
                 //Add scenario attachments here
                 let hookActions = [];
 
@@ -217,7 +218,7 @@ class TestFlow {
 
     /**
      * Maps the cucumber hooks to the automation infrastructure
-     * @param {{registerHandler: function(string, object, function)}} hooksManager cucumber's registerHandler function
+     * @param {{After: function(function), registerHandler: function(string, object, function)}} hooksManager cucumber's registerHandler function
      */
     mapCucumberHooks(hooksManager){
         
@@ -230,7 +231,15 @@ class TestFlow {
         
         Object.keys(this._hooksHandlers).forEach(hookName => {
             let options = specificHookOptions[hookName] || standardHookOptions;
-            hooksManager.registerHandler(hookName, options, _self._hooksHandlers[hookName]);
+            switch (hookName) {
+                case 'After':
+                case 'Before':
+                    hooksManager[hookName](_self._hooksHandlers[hookName]);
+                    break;
+                default:
+                    hooksManager.registerHandler(hookName, options, _self._hooksHandlers[hookName]);
+                    break;
+            }
         });
     }
 
